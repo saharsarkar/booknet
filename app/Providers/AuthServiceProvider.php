@@ -17,6 +17,15 @@ class AuthServiceProvider extends ServiceProvider
     ];
 
     /**
+     * Permissions
+     * 
+     * action => [roles]
+     */
+    public static $permissions = [
+        'admin' => ['admin'],
+    ];
+
+    /**
      * Register any authentication / authorization services.
      *
      * @return void
@@ -25,6 +34,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        // Global gates
+
+        // Determine if user is admin
+        Gate::before(function ($user, $ability) {
+            if ($user->role === 'admin') {
+                return true;
+            }
+        });
     }
 }
