@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\UserController;
@@ -31,6 +32,9 @@ Route::apiResource('author', AuthorController::class);
 
 // Publisher routes
 Route::apiResource('publisher', PublisherController::class);
+
+// Category routes
+Route::apiResource('category', CategoryController::class);
 
 // Fallback route
 Route::fallback(function () {

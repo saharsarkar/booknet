@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Author;
+use App\Models\Category;
 use App\Models\Publisher;
 use App\Models\User;
 use App\Observers\AuthorObserver;
+use App\Observers\CategoryObserver;
 use App\Observers\PublisherObserver;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
@@ -34,5 +36,8 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         User::observe(UserObserver::class);
+        Author::observe(AuthorObserver::class);
+        Publisher::observe(PublisherObserver::class);
+        Category::observe(CategoryObserver::class);
     }
 }
