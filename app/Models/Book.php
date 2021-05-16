@@ -42,6 +42,11 @@ class Book extends Model implements Searchable
         return $this->belongsToMany(Category::class);
     }
 
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
+
 
     // Scopes
     public function scopeLatest($query)

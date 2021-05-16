@@ -9,6 +9,7 @@ use App\Http\Resources\BookResource;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\Image;
 use App\Models\Publisher;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
@@ -57,6 +58,17 @@ class BookController extends Controller
         //Assign the categories to the books
         $categoriesId = Category::retrieveCategoriesId($request->category);
         $book->categories()->sync($categoriesId);
+
+        // Extract images in the request and assign them to the book
+        if ($request->hasFile('image')) {
+            // Iterate in all given images
+            foreach ($request->file('image') as $image) {
+                // Store each image
+                $path = $image->store('book_images');
+                // Assign each image to the book
+                $book->images()->save(Image::make(['path' => $path]));
+            }
+        }
 
         // Return book
         return response()->json([

@@ -35,6 +35,12 @@ class BookObserver
 
         // Delete the book's pdf file from storage
         Storage::delete($book->pdf_path);
+
+        // Delete the book's images
+        foreach ($book->images as $image) {
+            Storage::delete($image->path);
+        }
+        $book->images()->delete();
     }
 
     private function clearCaches(Book $book)
