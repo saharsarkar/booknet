@@ -22,38 +22,52 @@ class Book extends Model implements Searchable
     ];
 
     // Relations
+
+    // One-to-one User
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
+    // One-to-one publisher
     public function publisher()
     {
         return $this->belongsTo(Publisher::class);
     }
-
+    // One-to-many authors
     public function authors()
     {
         return $this->belongsToMany(Author::class);
     }
-
+    // One-to-many categories
     public function categories()
     {
         return $this->belongsToMany(Category::class);
     }
-
+    // One-to-many images
     public function images()
     {
         return $this->hasMany(Image::class);
     }
-
+    // One-to-many comments
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->latest();
+    }
+    // One-to-many guestComments
+    public function guestComments()
+    {
+        return $this->hasMany(GuestComment::class)->latest();
+    }
 
     // Scopes
+
+    // Retrieve latest books
     public function scopeLatest($query)
     {
         return $query->orderBy(static::CREATED_AT, 'desc');
     }
 
+    // Retrieve pdf file url
     public function url()
     {
         return Storage::url($this->pdf_path);

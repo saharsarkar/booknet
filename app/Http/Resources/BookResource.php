@@ -24,6 +24,21 @@ class BookResource extends JsonResource
             'publisher' => new BookAuthPubCatResource($this->publisher),
             'authors' => BookAuthPubCatResource::collection($this->authors),
             'categories' => BookAuthPubCatResource::collection($this->categories),
+            'comments' => $this->getComments($this),
+        ];
+    }
+
+    private function getComments($book)
+    {
+        $reviewerComments = CommentResource::collection($book->comments()->with('user')->reviewerComments());
+        $userComments = CommentResource::collection($book->comments()->with('user')->userComments());
+        $guestComments = CommentResource::collection($book->guestComments()->latest()->get());
+
+        $otherComments = $userComments->merge($guestComments);
+
+        return [
+            'reviewerComments' => $reviewerComments,
+            'otherComments' => $otherComments,
         ];
     }
 }

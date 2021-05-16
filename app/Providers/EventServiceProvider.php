@@ -5,12 +5,16 @@ namespace App\Providers;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\Comment;
+use App\Models\GuestComment;
 use App\Models\Image;
 use App\Models\Publisher;
 use App\Models\User;
 use App\Observers\AuthorObserver;
 use App\Observers\BookObserver;
 use App\Observers\CategoryObserver;
+use App\Observers\CommentObserver;
+use App\Observers\GuestCommentObserver;
 use App\Observers\ImageObserver;
 use App\Observers\PublisherObserver;
 use App\Observers\UserObserver;
@@ -45,5 +49,7 @@ class EventServiceProvider extends ServiceProvider
         Category::observe(CategoryObserver::class);
         Book::observe(BookObserver::class);
         Image::observe(ImageObserver::class);
+        Comment::observe(CommentObserver::class);
+        GuestComment::observe(GuestCommentObserver::class);
     }
 }

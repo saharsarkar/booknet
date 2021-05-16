@@ -30,4 +30,15 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    // Relations
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->latest();
+    }
 }
