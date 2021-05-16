@@ -13,6 +13,23 @@ class Publisher extends Model implements Searchable
 
     protected $fillable = ['name'];
 
+    // Relations
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
+
+    // Scopes
+
+    /**
+     * Return publisher id.
+     * If given publisher does not exits in database, create it
+     */
+    public function scopeRetrievePublisherId($query, $publisher)
+    {
+        return $this->firstOrCreate(['name' => $publisher])->id;
+    }
+
     // Search interface
     public function getSearchResult(): SearchResult
     {

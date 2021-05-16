@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PublisherAuthorCategoryResource extends JsonResource
+class BookAuthPubCatResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,6 +14,7 @@ class PublisherAuthorCategoryResource extends JsonResource
      */
     public function toArray($request)
     {
+        // Filter models based on table name to generate the model url
         if ($this->getTable() === 'authors') {
             $url = route('author.show', ['author' => $this->id]);
         } else if ($this->getTable() === 'publishers') {
@@ -25,8 +26,7 @@ class PublisherAuthorCategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'url' => $url,
-            'books' => BookSummeryResource::collection($this->whenLoaded('books'))
+            'url' => $url
         ];
     }
 }
