@@ -17,9 +17,9 @@ class BookListResource extends JsonResource
             'description' => $this->description,
             'year' => $this->year,
             'url' => route('book.show', ['book' => $this->id]),
-            'publisher' => new BookPublisherAuthorResource($this->publisher()->get()),
-            'authors' => BookPublisherAuthorResource::collection($this->authors()->get()),
-            'categories' => BookPublisherAuthorResource::collection($this->categories()->get()),
+            'publisher' => new BookAuthPubCatResource($this->publisher()->get()),
+            'authors' => BookAuthPubCatResource::collection($this->authors()->get()),
+            'categories' => BookAuthPubCatResource::collection($this->categories()->get()),
             'images' => ImageResource::collection($this->images()->get()),
         ];
     }
