@@ -11,7 +11,6 @@ use App\Models\Book;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Publisher;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
@@ -27,9 +26,7 @@ class BookController extends Controller
     public function index()
     {
         // Retrieve all books
-        return Cache::tags('books')->remember('book-list', now()->addMinute(), function () {
-            return BookListResource::collection(Book::latest()->with(['publisher', 'authors'])->get());
-        });
+        return BookListResource::collection(Book::latest()->with(['publisher', 'authors'])->get());
     }
 
     /**
@@ -83,9 +80,7 @@ class BookController extends Controller
     public function show($book)
     {
         // Retrieve requested book
-        return Cache::tags('books')->remember("book-{$book}", now()->addMinute(), function () use ($book) {
-            return new BookResource(Book::with(['publisher', 'authors', 'images'])->findOrFail($book));
-        });
+        return new BookResource(Book::with(['publisher', 'authors', 'images'])->findOrFail($book));
     }
 
     /**

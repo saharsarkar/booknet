@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PublisherAuthorCategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {
@@ -19,9 +18,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Cache::tags('categories')->remember('category-list', now()->addMinute(), function () {
-            return PublisherAuthorCategoryResource::collection(Category::with('books')->withCount('books')->get());
-        });
+        return PublisherAuthorCategoryResource::collection(Category::with('books')->withCount('books')->get());
     }
 
     /**
@@ -47,9 +44,7 @@ class CategoryController extends Controller
      */
     public function show($category)
     {
-        return Cache::tags('categories')->remember("category-{$category}", now()->addMinute(), function () use ($category) {
-            return new PublisherAuthorCategoryResource(Category::with('books')->withCount('books')->findOrFail($category));
-        });
+        return new PublisherAuthorCategoryResource(Category::with('books')->withCount('books')->findOrFail($category));
     }
 
     /**

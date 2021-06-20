@@ -6,7 +6,6 @@ use App\Http\Resources\ImageResource;
 use App\Models\Book;
 use App\Models\Image;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
@@ -16,9 +15,7 @@ class ImageController extends Controller
      */
     public function index(Book $book)
     {
-        return Cache::tags('images')->remember("book-{$book->id}-image-list", now()->addMinute(), function () use ($book) {
-            return ImageResource::collection($book->images);
-        });
+        return ImageResource::collection($book->image);
     }
 
     /**
@@ -45,9 +42,7 @@ class ImageController extends Controller
      */
     public function show(Book $book, Image $image)
     {
-        return Cache::tags('images')->remember("book-{$book->id}-image-{$image->id}", now()->addMinute(), function () use ($image) {
-            return new ImageResource($image);
-        });
+        return new ImageResource($image);
     }
 
     /**

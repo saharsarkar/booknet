@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
@@ -17,9 +16,7 @@ class UserController extends Controller
 
     public function show($user)
     {
-        return Cache::tags('users')->remember("user-{$user}", now()->addMinute(), function () use ($user) {
-            return new UserResource(User::findOrFail($user));
-        });
+        return new UserResource(User::findOrFail($user));
     }
 
     public function update(UserUpdateRequest $request, User $user)

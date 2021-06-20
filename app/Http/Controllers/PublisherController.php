@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PublisherAuthorCategoryResource;
 use App\Models\Publisher;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class PublisherController extends Controller
 {
@@ -19,9 +18,7 @@ class PublisherController extends Controller
      */
     public function index()
     {
-        return Cache::tags('publishers')->remember('publisher-list', now()->addMinute(), function () {
-            return PublisherAuthorCategoryResource::collection(Publisher::with('books')->get());
-        });
+        return PublisherAuthorCategoryResource::collection(Publisher::with('books')->get());
     }
 
     /**
@@ -49,9 +46,7 @@ class PublisherController extends Controller
      */
     public function show($publisher)
     {
-        return Cache::tags('publishers')->remember("publisher-{$publisher}", now()->addMinute(), function () use ($publisher) {
-            return new PublisherAuthorCategoryResource(Publisher::with('books')->findOrFail($publisher));
-        });
+        return new PublisherAuthorCategoryResource(Publisher::with('books')->findOrFail($publisher));
     }
 
     /**

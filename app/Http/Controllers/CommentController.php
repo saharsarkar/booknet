@@ -9,7 +9,6 @@ use App\Models\Book;
 use App\Models\Comment;
 use App\Models\GuestComment;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 
 class CommentController extends Controller
 {
@@ -23,23 +22,20 @@ class CommentController extends Controller
      */
     public function index(Book $book)
     {
-        return Cache::tags('comments')->remember("book-{$book->id}-comment-list", now()->addSeconds(30), function () use ($book) {
+        // Retrieve reviewer user's comments
+        $reviewerComments = CommentResource::collection($book->comments()->with('user')->reviewerComments());
+        // Retrieve not reviewer user's comments
+        $userComments = CommentResource::collection($book->comments()->with('user')->userComments());
+        // Retrieve guest comments
+        $guestComments = CommentResource::collection($book->guestComments()->get());
+        // Merge not reviewer user's comments with guest comments and sort them based on desc
+        $otherComments = $userComments->merge($guestComments)->sortByDesc('created_at')->values();
 
-            // Retrieve reviewer user's comments
-            $reviewerComments = CommentResource::collection($book->comments()->with('user')->reviewerComments());
-            // Retrieve not reviewer user's comments
-            $userComments = CommentResource::collection($book->comments()->with('user')->userComments());
-            // Retrieve guest comments
-            $guestComments = CommentResource::collection($book->guestComments()->get());
-            // Merge not reviewer user's comments with guest comments and sort them based on desc
-            $otherComments = $userComments->merge($guestComments)->sortByDesc('created_at')->values();
-
-            // Return message
-            return response()->json([
-                'reviewerComments' => $reviewerComments,
-                'otherComments' => $otherComments,
-            ]);
-        });
+        // Return message
+        return response()->json([
+            'reviewerComments' => $reviewerComments,
+            'otherComments' => $otherComments,
+        ]);
     }
 
     /**
@@ -87,9 +83,7 @@ class CommentController extends Controller
      */
     public function show(Book $book, Comment $comment)
     {
-        return Cache::tags('comments')->remember("book-{$book->id}-comment-{$comment->id}", now()->addMinute(), function () use ($comment) {
-            return new CommentResource($comment);
-        });
+        return new CommentResource($comment);
     }
 
     /**
