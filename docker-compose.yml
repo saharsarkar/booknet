@@ -18,41 +18,32 @@ services:
     networks:
       - sail
     depends_on:
-      - mysql
-      - redis
+      - pgsql
 
-  mysql:
-    image: "mysql:8.0"
-    ports:
-      - "${FORWARD_DB_PORT:-3306}:3306"
+  pgsql:
+    restart: always
+    image: postgres:12.0-alpine
     environment:
-      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
-      MYSQL_DATABASE: "${DB_DATABASE}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASS: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_DATABASE}"
+    ports:
+      - "5432:5432"
     volumes:
-      - "sailmysql:/var/lib/mysql"
+      - sailpgsql:/var/lib/postgresql/data/
     networks:
       - sail
 
-  phpmyadmin:
-    image: "phpmyadmin"
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - pgsql
     ports:
-      - 8080:80
+      - "5051:80"
     environment:
-      PMA_PASSWORD: "${DB_PASSWORD}"
-      PMA_HOST: "${DB_DATABASE}"
-      PMA_ARBITRARY: 1
-    networks:
-      - sail
-
-  redis:
-    image: "redis:alpine"
-    ports:
-      - "${FORWARD_REDIS_PORT:-6379}:6379"
-    volumes:
-      - "sailredis:/data"
+      PGADMIN_DEFAULT_EMAIL: pgadmin@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: "${DB_PASSWORD}"
+    restart: always
     networks:
       - sail
 
@@ -60,7 +51,5 @@ networks:
   sail:
     driver: bridge
 volumes:
-  sailmysql:
-    driver: local
-  sailredis:
+  sailpgsql:
     driver: local
