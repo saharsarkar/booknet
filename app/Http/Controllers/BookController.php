@@ -9,7 +9,6 @@ use App\Http\Resources\BookResource;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
-use App\Models\Image;
 use App\Models\Publisher;
 use Illuminate\Support\Facades\Storage;
 
@@ -41,9 +40,13 @@ class BookController extends Controller
         // Retrieve publisher id
         $request['publisher_id'] = Publisher::retrievePublisherId($request->publisher);
 
+        // Extract image file from request and store it in storage
+        if ($request->hasFile('thumbnail')) {
+            $request['image'] = $request->file('thumbnail')->store('books/image');
+        }
         // Extract pdf file from request and store it in storage
         if ($request->hasFile('pdf_file')) {
-            $request['pdf_path'] = $request->file('pdf_file')->store('book_pdf');
+            $request['pdf'] = $request->file('pdf_file')->store('books/pdf');
         }
 
         // Create book object
@@ -56,21 +59,10 @@ class BookController extends Controller
         $categoriesId = Category::retrieveCategoriesId($request->category);
         $book->categories()->sync($categoriesId);
 
-        // Extract images in the request and assign them to the book
-        if ($request->hasFile('image')) {
-            // Iterate in all given images
-            foreach ($request->file('image') as $image) {
-                // Store each image
-                $path = $image->store('book_images');
-                // Assign each image to the book
-                $book->images()->save(Image::make(['path' => $path]));
-            }
-        }
-
         // Return book
         return response()->json([
             'message' => 'Book created',
-            'data' => new BookResource($book)
+            'book' => new BookResource($book)
         ]);
     }
 
@@ -80,7 +72,7 @@ class BookController extends Controller
     public function show($book)
     {
         // Retrieve requested book
-        return new BookResource(Book::with(['publisher', 'authors', 'images'])->findOrFail($book));
+        return new BookResource(Book::with(['publisher', 'authors'])->findOrFail($book));
     }
 
     /**
@@ -94,11 +86,20 @@ class BookController extends Controller
         // Extract pdf file from request and store it in storage
         if ($request->hasFile('pdf_file')) {
             // Delete existence pdf
-            if ($book->pdf_path) {
-                Storage::delete($book->pdf_path);
+            if ($book->pdf) {
+                Storage::delete($book->pdf);
             }
             // Store the new pdf
-            $request['pdf_path'] = $request->file('pdf_file')->store('book_pdf');
+            $request['pdf'] = $request->file('pdf_file')->store('book_pdf');
+        }
+        // Extract image file from request and store it in storage
+        if ($request->hasFile('image')) {
+            // Delete existence image
+            if ($book->image) {
+                Storage::delete($book->image);
+            }
+            // Store the new pdf
+            $request['image'] = $request->file('image')->store('book/image');
         }
 
         // Update the book
@@ -116,6 +117,14 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+        // delete existing book image
+        if (!is_null($book->image)) {
+            Storage::delete($book->image);
+        }
+        // delete existing book pdf
+        if (!is_null($book->pdf)) {
+            Storage::delete($book->pdf);
+        }
         // Delete the book record
         $book->delete();
 

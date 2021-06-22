@@ -21,7 +21,8 @@ class CreateBooksTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('publisher_id')->constrained()->onDelete('cascade');
             $table->string('digikala')->nullable();
-            $table->string('pdf_path')->nullable();
+            $table->string('pdf')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

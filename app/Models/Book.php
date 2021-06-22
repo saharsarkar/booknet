@@ -18,7 +18,9 @@ class Book extends Model implements Searchable
         'year',
         'user_id',
         'publisher_id',
-        'pdf_path'
+        'pdf',
+        'image',
+        'digikala',
     ];
 
     // Relations
@@ -43,11 +45,6 @@ class Book extends Model implements Searchable
     {
         return $this->belongsToMany(Category::class);
     }
-    // One-to-many images
-    public function images()
-    {
-        return $this->hasMany(Image::class);
-    }
     // One-to-many comments
     public function comments()
     {
@@ -68,9 +65,15 @@ class Book extends Model implements Searchable
     }
 
     // Retrieve pdf file url
-    public function url()
+    public function pdf_url()
     {
-        return Storage::url($this->pdf_path);
+        return Storage::url($this->pdf);
+    }
+
+    // Retrieve pdf file url
+    public function image_url()
+    {
+        return Storage::url($this->image);
     }
 
     // Search interface
