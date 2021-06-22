@@ -10,17 +10,30 @@ The project runs on docker, so you need docker installed on your os. Then, run `
 
 ### Sail Commands
 
-| Command                 | Description                                            |
-| ----------------------- | ------------------------------------------------------ |
-| sail up -d              | Run server and containers                              |
-| sail db:seed            | Seeding Database                                       |
-| sail db:seed -n         | Seeding database with default values                   |
-| sail artisan route:list | Show route table                                       |
-| sail down               | Shutdown server and containers                         |
-| sail down -v            | Shutdown server and containers and also remove volumes |
+| Command                      | Description                                            |
+| ---------------------------- | ------------------------------------------------------ |
+| sail up -d                   | Run server and containers                              |
+| sail artisan migrate:refresh | Migrate tables and delete all data                     |
+| sail db:seed                 | Seeding Database                                       |
+| sail artisan route:list      | Show route table                                       |
+| sail down                    | Shutdown server and containers                         |
+| sail down -v                 | Shutdown server and containers and also remove volumes |
 
 > All `sail` keyword in the table actually is `./vendor/bin/sail`.
 
-### Phpmyadmin
+### Pgadmin
 
-The **phpmyadmin** runs on `localhost:8080`. No need for password, just fill **server = mysql** and **username = root** fields.
+The pgadmin runs on `localhost:5051`. Enter `pgadmin@pgadmin.org` for email and `admin` for password. To connect postgres to pgadmin, create new server.
+
+> For creating new server, follow these steps:
+>
+> 1. Select New Server
+> 2. In **General** tab and in **name** field enter a name for your server (e.g. booknet)
+> 3. In **Connection** tab:
+>     - Host name: `booknet_pgsql_1`
+>     - Maintenance Database: `booknet`
+>     - Username and Password: `admin`
+>     - Check Save password checkbox
+> 4. Click the blue **Save** button
+
+The tables can be found in `Server > booknet > Databases > booknet > Schemas > Tables`.
