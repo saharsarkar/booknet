@@ -23,11 +23,11 @@ class CommentController extends Controller
     public function index(Book $book)
     {
         // Retrieve reviewer user's comments
-        $reviewerComments = CommentResource::collection($book->comments()->with('user')->reviewerComments());
+        $reviewerComments = CommentResource::collection($book->comments()->reviewerComments());
         // Retrieve not reviewer user's comments
-        $userComments = CommentResource::collection($book->comments()->with('user')->userComments());
+        $userComments = CommentResource::collection($book->comments()->userComments());
         // Retrieve guest comments
-        $guestComments = CommentResource::collection($book->guestComments()->get());
+        $guestComments = CommentResource::collection($book->guestComments);
         // Merge not reviewer user's comments with guest comments and sort them based on desc
         $otherComments = $userComments->merge($guestComments)->sortByDesc('created_at')->values();
 

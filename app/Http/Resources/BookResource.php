@@ -8,19 +8,19 @@ class BookResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
     public function toArray($request)
     {
-        $pdf_url = $this->pdf_path !== null ? $this->url() : '';
+        $pdf_url = $this->pdf ? $this->pdf_url() : '';
+        $image_url = $this->image ? $this->image_url() : '';
 
         return [
+            'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
             'year' => $this->year,
-            'pdf_path' => $pdf_url,
+            'image' => $image_url,
+            'pdf' => $pdf_url,
             'publisher' => new BookAuthPubCatResource($this->publisher),
             'authors' => BookAuthPubCatResource::collection($this->authors),
             'categories' => BookAuthPubCatResource::collection($this->categories),
@@ -30,9 +30,9 @@ class BookResource extends JsonResource
 
     private function getComments($book)
     {
-        $reviewerComments = CommentResource::collection($book->comments()->with('user')->reviewerComments());
-        $userComments = CommentResource::collection($book->comments()->with('user')->userComments());
-        $guestComments = CommentResource::collection($book->guestComments()->latest()->get());
+        $reviewerComments = CommentResource::collection($book->comments()->reviewerComments());
+        $userComments = CommentResource::collection($book->comments()->userComments());
+        $guestComments = CommentResource::collection($book->guestComments);
 
         $otherComments = $userComments->merge($guestComments);
 

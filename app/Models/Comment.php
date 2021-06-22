@@ -25,14 +25,14 @@ class Comment extends Model
     // Scopes
     public function scopeReviewerComments($query)
     {
-        return $this->whereHas('user', function ($query) {
+        return $query->whereHas('user', function ($query) {
             $query->where('reviewer', 1);
         })->orderBy(static::CREATED_AT, 'desc')->get();
     }
 
     public function scopeUserComments($query)
     {
-        return $this->whereHas('user', function ($query) {
+        return $query->whereHas('user', function ($query) {
             $query->where('reviewer', 0);
         })->get();
     }
