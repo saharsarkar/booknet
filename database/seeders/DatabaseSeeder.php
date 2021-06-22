@@ -13,19 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Ask questions from user
-        if ($this->command->confirm('Want to refresh database?', true)) {
-            $this->command->call('migrate:refresh');
-            $this->command->info('Database is seeded');
-        }
-
         // Call seeders
         $this->call([
             UserSeeder::class,
-            AuthorPublisherCategorySeeder::class,
-            BookSeeder::class,
-            BookAuthorPublisherCategorySeeder::class,
-            CommentSeeder::class,
         ]);
     }
 }
