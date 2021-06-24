@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7548d1819eb96bea24eeccd6839aea1",
+    "content-hash": "5a1056a8d8b0e6c829bef102afaf4f41",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2381,19 +2381,20 @@
         },
         {
             "name": "spatie/laravel-searchable",
-            "version": "1.9.3",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-searchable.git",
-                "reference": "b735daf33c7df10bb23355fa9f7afead457ac656"
+                "reference": "1c57e0adb522f5567d93e2c98e42ffe6bb2ea884"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-searchable/zipball/b735daf33c7df10bb23355fa9f7afead457ac656",
-                "reference": "b735daf33c7df10bb23355fa9f7afead457ac656",
+                "url": "https://api.github.com/repos/spatie/laravel-searchable/zipball/1c57e0adb522f5567d93e2c98e42ffe6bb2ea884",
+                "reference": "1c57e0adb522f5567d93e2c98e42ffe6bb2ea884",
                 "shasum": ""
             },
             "require": {
+                "ext-pdo": "*",
                 "laravel/framework": "^8.0",
                 "php": "^7.3|^8.0"
             },
@@ -2434,7 +2435,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-searchable/issues",
-                "source": "https://github.com/spatie/laravel-searchable/tree/1.9.3"
+                "source": "https://github.com/spatie/laravel-searchable/tree/1.10.0"
             },
             "funding": [
                 {
@@ -2442,7 +2443,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2021-05-04T08:39:23+00:00"
+            "time": "2021-06-24T13:05:38+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -7466,5 +7467,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
