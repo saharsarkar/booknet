@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Hash;
 
 class UserAuthController extends Controller
 {
+    public function profile(Request $request)
+    {
+        return new UserResource(Auth::user());
+    }
+
     public function register(UserRegisterRequest $request)
     {
         $request->validated();
