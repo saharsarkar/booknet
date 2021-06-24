@@ -105,6 +105,17 @@ class BookController extends Controller
         // Update the book
         $book->update($request->all());
 
+        if ($request->author) {
+            // Assign the authors to the books
+            $authorsId = Author::retrieveAuthorsId($request->author);
+            $book->authors()->sync($authorsId);
+        }
+        if ($request->category) {
+            //Assign the categories to the books
+            $categoriesId = Category::retrieveCategoriesId($request->category);
+            $book->categories()->sync($categoriesId);
+        }
+
         // Return message
         return response()->json([
             'message' => 'Book updated',
