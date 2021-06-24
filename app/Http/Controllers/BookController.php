@@ -10,6 +10,7 @@ use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Publisher;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
@@ -21,11 +22,22 @@ class BookController extends Controller
 
     /**
      * Display a listing of the resource.
+     * If the request has cat_id in itself
+     * search books based on given title in category with cat_id id
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->cat_id && $request->title) {
+            // first find category, then find its books that have the given title
+            $books = Category::findOrFail($request->cat_id)->books()->search($request->title)->get();
+        } elseif ($request->title) {
+            $books = Book::search($request->title)->get();
+        } else {
+            // retrieve all books if request does not have cat_id, neither title
+            $books = Book::with(['publisher', 'authors'])->latest()->get();
+        }
         // Retrieve all books
-        return BookListResource::collection(Book::latest()->with(['publisher', 'authors'])->get());
+        return BookListResource::collection($books);
     }
 
     /**

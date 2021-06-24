@@ -5,10 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Searchable\Searchable;
-use Spatie\Searchable\SearchResult;
 
-class Book extends Model implements Searchable
+class Book extends Model
 {
     use HasFactory;
 
@@ -58,33 +56,38 @@ class Book extends Model implements Searchable
 
     // Scopes
 
-    // Retrieve latest books
+    /**
+     * Sort books based on latest
+     */
     public function scopeLatest($query)
     {
         return $query->orderBy(static::CREATED_AT, 'desc');
     }
 
-    // Retrieve pdf file url
+    /**
+     * Search books model with given title
+     */
+    public function scopeSearch($query, $title)
+    {
+        return $query
+            ->where('title', 'like', "%{$title}%")
+            ->with(['publisher', 'authors'])
+            ->orderBy('books.created_at', 'desc');
+    }
+
+    /**
+     * Retrieve pdf file url
+     */
     public function pdf_url()
     {
         return Storage::url($this->pdf);
     }
 
-    // Retrieve pdf file url
+    /**
+     * Retrieve pdf file url
+     */
     public function image_url()
     {
         return Storage::url($this->image);
-    }
-
-    // Search interface
-    public function getSearchResult(): SearchResult
-    {
-        $url = route('book.show', ['book' => $this->id]);
-
-        return new SearchResult(
-            $this,
-            $this->title,
-            $url
-        );
     }
 }
