@@ -23,6 +23,10 @@ class Comment extends Model
     }
 
     // Scopes
+
+    /**
+     * Filter all reviewer's comments
+     */
     public function scopeReviewerComments($query)
     {
         return $query->whereHas('user', function ($query) {
@@ -30,6 +34,9 @@ class Comment extends Model
         })->orderBy(static::CREATED_AT, 'desc')->get();
     }
 
+    /**
+     * Filter not reviewer's comments
+     */
     public function scopeUserComments($query)
     {
         return $query->whereHas('user', function ($query) {

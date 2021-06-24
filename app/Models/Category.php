@@ -14,10 +14,14 @@ class Category extends Model
     // Relations
     public function books()
     {
-        return $this->belongsToMany(Book::class)->latest();
+        return $this->belongsToMany(Book::class);
     }
 
     // Scopes
+
+    /**
+     * Retrieve categories id. It will create the new categories and then retrieve them
+     */
     public function scopeRetrieveCategoriesId($query, $categories)
     {
         foreach ($categories as $category) {
