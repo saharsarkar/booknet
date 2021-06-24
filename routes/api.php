@@ -24,11 +24,13 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', [UserAuthController::class, 'register'])->name('register');
 Route::post('login', [UserAuthController::class, 'login'])->name('login');
 Route::post('logout', [UserAuthController::class, 'logout'])->name('logout')->middleware('auth:api');
-Route::get('me', [UserAuthController::class, 'profile'])->name('profile')->middleware('auth:api');
-
 
 // user model routes
-Route::apiResource('user', UserController::class)->except(['index', 'store']);
+// we don't use apiResource because we use token for show, update, and delete user profile
+// instead user id (apiResource uses id) 
+Route::get('profile', [UserController::class, 'show'])->name('profile');
+Route::put('profile', [UserController::class, 'update'])->name('profile-update');
+Route::delete('profile', [UserController::class, 'destroy'])->name('profile-delete');
 
 // Author routes
 Route::apiResource('author', AuthorController::class);

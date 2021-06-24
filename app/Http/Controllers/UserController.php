@@ -5,22 +5,31 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        // check user has token (logged in) to update and destroy
-        $this->middleware('auth:api')->only(['update', 'destroy']);
+        // check user has token (logged in)
+        $this->middleware('auth:api');
     }
 
-    public function show($user)
+    /**
+     * Retrieve authenticated user profile 
+     */
+    public function show(Request $request)
     {
-        return new UserResource(User::findOrFail($user));
+        return new UserResource(Auth::user());
     }
 
-    public function update(UserUpdateRequest $request, User $user)
+    /**
+     * Update user model
+     */
+    public function update(UserUpdateRequest $request)
     {
+        $user = $request->user();
         // Determine the requested user is same as the user with this id
         $this->authorize('update', $user);
 
@@ -28,7 +37,7 @@ class UserController extends Controller
         $request->validated();
 
         // Check if request has role parameter and the requested user is admin
-        if ($request->role === 'admin' && $request->user()->role !== 'admin') {
+        if ($request->role === 'admin' && $user->role !== 'admin') {
             return response()->json([
                 'message' => 'This action is unauthorize'
             ], 403);
@@ -36,6 +45,7 @@ class UserController extends Controller
 
         // update user record with request's data
         $user->update($request->all());
+
         // return successful message
         return response()->json([
             'message' => 'Update successfully',
