@@ -11,11 +11,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UserAuthController extends Controller
 {
-    public function profile(Request $request)
-    {
-        return new UserResource(Auth::user());
-    }
-
     public function register(UserRegisterRequest $request)
     {
         $request->validated();
@@ -66,6 +61,8 @@ class UserAuthController extends Controller
     {
         // delete requested user's tokens
         $request->user()->tokens()->delete();
+        // delete all sessions
+        session()->flush();
         // return message
         return response()->json(['message' => 'Logged out successfully']);
     }
