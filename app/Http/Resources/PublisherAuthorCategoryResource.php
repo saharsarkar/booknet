@@ -17,7 +17,7 @@ class PublisherAuthorCategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'books' => BookSummeryResource::collection($this->whenLoaded('books'))
+            'books' => BookListResource::collection($this->whenLoaded('books'))
         ];
     }
 }
