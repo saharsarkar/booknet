@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Carbon;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class CommentResource extends JsonResource
 {
@@ -24,9 +25,8 @@ class CommentResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'title' => $this->title,
             'content' => $this->content,
-            'created_at' => Carbon::parse($this->created_at)->diffForHumans(),
+            'created_at' => GoogleTranslate::trans(Carbon::parse($this->created_at)->diffForHumans(), 'fa'),
             'user' => $user,
         ];
     }
