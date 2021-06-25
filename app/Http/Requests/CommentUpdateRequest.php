@@ -24,7 +24,6 @@ class CommentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'bail | min:5 | max:30 | string',
             'content' => 'bail | min:5 | max:100',
         ];
     }

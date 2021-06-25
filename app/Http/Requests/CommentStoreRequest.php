@@ -24,8 +24,6 @@ class CommentStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'bail | min:3 | max:20 | string',
-            'title' => 'bail | required | min:5 | max:30 | string',
             'content' => 'bail | required | min:5 | max:100',
         ];
     }

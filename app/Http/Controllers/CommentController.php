@@ -59,7 +59,7 @@ class CommentController extends Controller
             // Return message
             return response()->json([
                 'message' => 'Comment posted',
-                'data' => new CommentResource($comment)
+                'comment' => new CommentResource($comment)
             ]);
         }
 
@@ -74,7 +74,7 @@ class CommentController extends Controller
         // Return message
         return response()->json([
             'message' => 'Comment posted',
-            'data' => new CommentResource($comment)
+            'comment' => new CommentResource($comment)
         ]);
     }
 
@@ -102,7 +102,7 @@ class CommentController extends Controller
         // Return message
         return response()->json([
             'message' => 'Comment updated',
-            'data' => new CommentResource($comment)
+            'comment' => new CommentResource($comment)
         ]);
     }
 
