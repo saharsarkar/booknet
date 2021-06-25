@@ -102,16 +102,16 @@ class BookController extends Controller
                 Storage::delete($book->pdf);
             }
             // Store the new pdf
-            $request['pdf'] = $request->file('pdf_file')->store('book_pdf');
+            $request['pdf'] = $request->file('pdf_file')->store('books/pdf');
         }
         // Extract image file from request and store it in storage
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('thumbnail')) {
             // Delete existence image
             if ($book->image) {
                 Storage::delete($book->image);
             }
             // Store the new pdf
-            $request['image'] = $request->file('image')->store('book/image');
+            $request['image'] = $request->file('thumbnail')->store('books/image');
         }
 
         // Update the book

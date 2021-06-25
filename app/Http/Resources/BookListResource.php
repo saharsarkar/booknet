@@ -17,6 +17,7 @@ class BookListResource extends JsonResource
             'year' => $this->year,
             'description' => $this->description,
             'image' => $this->image ? $this->image_url() : '',
+            'pdf' => $this->pdf ? $this->pdf_url() : '',
             'publisher' => new BookAuthPubCatResource($this->publisher),
             'authors' => BookAuthPubCatResource::collection($this->authors),
             'categories' => BookAuthPubCatResource::collection($this->categories),
