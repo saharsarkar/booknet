@@ -21,6 +21,7 @@ class BookResource extends JsonResource
             'year' => $this->year,
             'image' => $image_url,
             'pdf' => $pdf_url,
+            'digikala' => $this->digikala,
             'publisher' => new BookAuthPubCatResource($this->publisher),
             'authors' => BookAuthPubCatResource::collection($this->authors),
             'categories' => BookAuthPubCatResource::collection($this->categories),
